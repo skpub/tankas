@@ -57,8 +57,9 @@
     flex-flow: column;
     width: 50px;
     height: 100dvh;
-    background-color: var(--color1);
+    background-color: rgb(from var(--color1) r g b / 10%);
     img {
+      filter: drop-shadow(1px 1px 0.5px var(--background));
       margin: 0 auto;
       padding: 5px;
       width: 80%;
