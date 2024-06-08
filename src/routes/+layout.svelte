@@ -1,5 +1,9 @@
-<script>
+<script lang="ts">
   import icon from '$lib/img/icon.svg'
+  import Notification from '$lib/Notification.svelte'
+  import { notify } from '$lib/notificationStore'
+
+  export { notify }
 </script>
 
 <div id='main'>
@@ -9,6 +13,7 @@
   <div id='content'>
     <slot />
   </div>
+  <Notification />
 </div>
 
 <style>
@@ -17,6 +22,7 @@
     --foreground: #f5f5f5;
     --color1: #ffd790;
     --color2: #a0f7ff;
+    --warning: #f04040;
     color: var(--foreground);
     background-color: var(--background);
     margin: 0;
