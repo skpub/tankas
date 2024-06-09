@@ -1,5 +1,8 @@
 <script lang="ts">
     import { notify } from "$lib/notificationStore";
+    import { setCookie } from "$lib/cookie";
+    import { goto } from "$app/navigation";
+    import { PUBLIC_API_ORIGIN } from "$env/static/public"
 
   let user_id = ''
   let password = ''
@@ -9,15 +12,24 @@
     const form = new FormData()
     form.append('user_id', user_id)
     form.append('password', password)
-    let response = await fetch('http://localhost:8080/login', {
-      method: 'POST',
-      body: form,
-    })
-    result = await response.json()
-    if (response.ok) {
-      notify('トークンを得た！')
-    } else {
-      notify('ログインに失敗')
+    try {
+      let response = await fetch(PUBLIC_API_ORIGIN + "/login", {
+        method: 'POST',
+        body: form,
+      })
+      result = await response.json()
+      if (response.ok) {
+        notify('トークンを得た！')
+        setTimeout(() => {
+          goto('/')
+        }, 2000)
+        if (result != null) setCookie('token', result.token, 30)
+        else notify('何かがおかしい。ログイン成功なのにトークンが返ってこない。')
+      } else {
+        notify('ログインに失敗')
+      }
+    } catch {
+      notify('サーバが死んではるわ。')
     }
   }
 </script>
@@ -25,9 +37,9 @@
 <div id='login'>
   <h1>Tankas Login</h1>
   <form on:submit={login}>
-    <input name="user_id"  bind:value={user_id}   placeholder="UserID(ログインに使うID)" type="text">
+    <input name="user_id"  bind:value={user_id}   placeholder="UserID" type="text">
     <input name="password" bind:value={password}  placeholder="Password" type="password">
-    <button>Sign up</button>
+    <button>Log in</button>
   </form>
 </div>
 

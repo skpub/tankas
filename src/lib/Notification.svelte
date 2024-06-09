@@ -22,7 +22,7 @@
     position: absolute;
     min-width: 200px;
     min-height: 100px;
-    background-color: var(--background);
+    /* background-color: var(--background); */
     border-radius: 20px;
     top: 10px;
     right: 10px;

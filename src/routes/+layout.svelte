@@ -1,5 +1,8 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
   import icon from '$lib/img/icon.svg'
+  import search from '$lib/img/search.svg'
+  import home from '$lib/img/home.svg'
   import Notification from '$lib/Notification.svelte'
   import { notify } from '$lib/notificationStore'
 
@@ -7,8 +10,16 @@
 </script>
 
 <div id='main'>
-  <div id='menu'>
-    <img src={icon} alt="">
+  <div id='menu_container'>
+    <img id='tankas_icon' src={icon} alt="">
+    <div id='menu'>
+      <a href="/">
+        <img src={home} alt="">
+      </a>
+      <a href="/search">
+        <img src={search} alt="">
+      </a>
+    </div>
   </div>
   <div id='content'>
     <slot />
@@ -18,7 +29,8 @@
 
 <style>
   :global(body) {
-    --background: #353330;
+    --background: #252320;
+    --background-contents: #353330;
     --foreground: #f5f5f5;
     --color1: #ffd790;
     --color2: #a0f7ff;
@@ -58,21 +70,33 @@
   #main {
     display: flex;
   }
+  #menu_container {
+    display: flex;
+    flex-flow: column;
+    width: 70px;
+    height: 100dvh;
+    /* background-color: rgb(from var(--color1) r g b); */
+    background-color: var(--background-contents);
+    a, img {
+      margin: 0 auto;
+    }
+  }
+  #tankas_icon {
+    width: 60%;
+    padding-bottom: 50px;
+    filter: drop-shadow(1px 1px 0.5px var(--background));
+    padding-top: 15px;
+  }
   #menu {
     display: flex;
     flex-flow: column;
-    width: 50px;
-    height: 100dvh;
-    background-color: rgb(from var(--color1) r g b / 10%);
-    img {
-      filter: drop-shadow(1px 1px 0.5px var(--background));
-      margin: 0 auto;
-      padding: 5px;
-      width: 80%;
+    a {
+      padding: 10px;
+      width: 40%;
     }
   }
   #content {
     flex-grow: 1;
-    margin: 15px;
+    /* margin-left: 15px; */
   }
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_API_ORIGIN } from "$env/static/public"
   let result: { message: string } | null = null
   let status: boolean | null = null // null: not sent yet, true: success, false: failed.
 
@@ -13,7 +14,7 @@
     form.append('user_id', user_id)
     form.append('email', email)
     form.append('password', password)
-    let response = await fetch('http://localhost:8080/signup', {
+    let response = await fetch(PUBLIC_API_ORIGIN + "/signup", {
       method: 'POST',
       body: form,
     })
