@@ -1,6 +1,6 @@
 <script>
   import { getCookie } from '$lib/cookie'
-  import Tl from '../tl.svelte';
+  import Tl from './tl.svelte';
 
   const token = getCookie('token')
   const isLoggedIn = token != null

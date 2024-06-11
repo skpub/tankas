@@ -1,7 +1,7 @@
 <script>
   import { getCookie } from '$lib/cookie'
   import { goto } from '$app/navigation'
-  import Tl from '../tl.svelte';
+  import Tl from './tl.svelte';
 
   const token = getCookie('token')
   const isLoggedIn = token != null
@@ -9,9 +9,9 @@
 
 
 {#if isLoggedIn}
-  <div id='tl_slot'>
-  </div>
+  <div id='tl_slot'></div>
   <hr>
+  <slot />
 {:else}
   <div id='ichigen_san'>
     <h1>Tankas</h1>
