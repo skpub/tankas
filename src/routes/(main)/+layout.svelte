@@ -1,17 +1,46 @@
-<script>
+<script lang="ts">
   import { getCookie } from '$lib/cookie'
   import { goto } from '$app/navigation'
-  import Tl from './tl.svelte';
+  import { PUBLIC_API_ORIGIN } from "$env/static/public";
+  import { onMount } from 'svelte';
 
   const token = getCookie('token')
   const isLoggedIn = token != null
+
+  let tanka = ''
+  let poet = ''
+
+  let socket: WebSocket
+  onMount(() => {
+    socket = new WebSocket(PUBLIC_API_ORIGIN + '/socket?user_id=' + 'skpub')
+    // socket.addEventListener('open', (event) => {
+    //   socket.send('Authorization: ' + token)
+    // })
+    socket.onopen = () => {
+      console.log("connected.")
+    }
+  })
+
+  function send1() {
+    socket.send("1,"+token+`{"meigen": "${tanka}", "poet": "${poet}"}`)
+  }
+
 </script>
 
 
 {#if isLoggedIn}
-  <div id='tl_slot'></div>
-  <hr>
-  <slot />
+  <div id='tl_container'>
+    <div id='tl_slot'></div>
+    <hr>
+    <div id='tl_view' class='scroll'>
+      <slot />
+    </div>
+    <form id='tanka_poster' action="">
+      <textarea name="" id="" bind:value={tanka} placeholder="短歌を入力してください"></textarea>
+      <input type="text" bind:value={poet} placeholder="詠んだ人の名前">
+      <button on:click={send1}>投稿</button>
+    </form>
+  </div>
 {:else}
   <div id='ichigen_san'>
     <h1>Tankas</h1>
@@ -27,6 +56,30 @@
 {/if}
 
 <style>
+  #tl_container {
+    margin: 0 auto;
+    width: 80%;
+    height: 100dvh;
+    display: flex;
+    flex-flow: column;
+  }
+  #tl_view {
+    flex-grow: 1;
+  }
+  #tanka_poster {
+    display: flex;
+    flex-flow: row;
+    margin: 0 auto;
+    width: 80%;
+    textarea {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    button {
+      margin: 20px;
+      width: 100px;
+    }
+  }
   #ichigen_san {
     width: 100px;
     margin: 0 auto;

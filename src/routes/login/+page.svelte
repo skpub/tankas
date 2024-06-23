@@ -20,10 +20,10 @@
       result = await response.json()
       if (response.ok) {
         notify('トークンを得た！')
-        setTimeout(() => {
-          goto('/')
-        }, 2000)
-        if (result != null) setCookie('token', result.token, 30)
+        goto('/')
+        if (result != null) {
+          setCookie('token', result.token, 30)
+        }
         else notify('何かがおかしい。ログイン成功なのにトークンが返ってこない。')
       } else {
         notify('ログインに失敗')

@@ -1,7 +1,18 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { PUBLIC_API_ORIGIN } from "$env/static/public";
   import { getCookie } from "$lib/cookie";
   import { notify } from "$lib/notificationStore";
+  import { onDestroy, onMount } from "svelte";
+
+  let tl_fetcher: number
+  onMount(() => {
+    tl_fetch()
+  })
+
+  onDestroy(() => {
+    clearInterval(tl_fetcher)
+  })
 
   type Meigen = {
     Meigen: string,
@@ -14,14 +25,20 @@
     contents = []
     const token = getCookie('token')
     if (token != null) {
-      const res = await fetch(PUBLIC_API_ORIGIN + '/auth/fetch_tl', {
+      const res = await fetch(PUBLIC_API_ORIGIN + `/auth/fetch_tl?before=${Date.now()+1}`, {
         method: 'GET',
         headers: {
           Authorization: `${token}`
-        }
+        },
+        // body: JSON.stringify({
+        //   before: time
+        // }),
       })
       res.json().then(data => {
-        for (let content of data.contents) {
+        const ret_contents: Meigen[] = data.contents
+        if (ret_contents.length === 0) return
+        console.log(ret_contents)
+        for (let content of ret_contents) {
           const tmp: Meigen = {
             Meigen: content.Meigen,
             WhomID: content.WhomID,
@@ -33,11 +50,11 @@
       })
     } else {
       notify('トークンが期限を迎えました。')
+      goto('/login')
     }
   }
 </script>
 
-<button on:click={() => tl_fetch()}>fetch TL</button>
 <div id='TL'>
   {#each contents as content}
     <div class='tanka_container'>
@@ -50,9 +67,14 @@
 </div>
 
 <style>
+  #TL_container {
+    display: flex;
+    flex-flow: column;
+    height: calc(100dvh - 100px);
+  }
   #TL {
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    flex-grow: 1;
     margin: 0 auto;
     background-color: var(--background-contents);
   }
@@ -71,8 +93,5 @@
   }
   .poet {
     margin: 0;
-  }
-  button {
-    width: 300px;
   }
 </style>

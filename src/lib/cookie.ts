@@ -6,7 +6,6 @@ export function setCookie(name: string, value: string, duration_min: number) {
 
 export function getCookie(name: string) {
   if (typeof document === 'undefined') {
-    console.log("fuck")
     return null
   }
   const cookie = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith(name))

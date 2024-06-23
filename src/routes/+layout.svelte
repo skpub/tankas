@@ -40,6 +40,9 @@
     margin: 0;
     padding: 0;
   }
+  :global(.scroll) {
+    overflow: auto;
+  }
   :global(h1) {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
@@ -49,7 +52,7 @@
     display: flex;
     flex-flow: column;
   }
-  :global(input) {
+  :global(input, textarea) {
     margin-bottom: 10px;
     background-color: var(--background);
     padding: 5px;
@@ -57,7 +60,7 @@
     border: 2px solid #ffffff30;
     border-radius: 10px;
   }
-  :global(input:focus) {
+  :global(input:focus, textarea:focus) {
     outline: 2px solid var(--color1);
   }
   :global(button) {
