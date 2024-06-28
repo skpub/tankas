@@ -1,13 +1,13 @@
 <script>
   import { getCookie } from '$lib/cookie'
-  import Tl from './tl.svelte';
+  import Local_TL from './local_tl.svelte';
 
   const token = getCookie('token')
   const isLoggedIn = token != null
 </script>
 
 {#if isLoggedIn}
-  <Tl />
+  <Local_TL />
 {:else}
   <h1>Tankas</h1>
   <div id='login_or_signup'>

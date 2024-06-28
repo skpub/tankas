@@ -1,10 +1,13 @@
 <script lang="ts">
   import { getCookie } from '$lib/cookie'
   import { goto } from '$app/navigation'
-  import { PUBLIC_API_ORIGIN } from "$env/static/public";
-  import { onMount } from 'svelte';
+  import { PUBLIC_API_ORIGIN } from "$env/static/public"
+  import { onMount } from 'svelte'
+  import type { Tanka } from './tankaReceive';
+  import { tanka_msg } from './tankaReceive'
 
   const token = getCookie('token')
+  const user_id = getCookie('user_id')
   const isLoggedIn = token != null
 
   let tanka = ''
@@ -12,21 +15,33 @@
 
   let socket: WebSocket
   onMount(() => {
-    socket = new WebSocket(PUBLIC_API_ORIGIN + '/socket?user_id=' + 'skpub')
-    // socket.addEventListener('open', (event) => {
-    //   socket.send('Authorization: ' + token)
-    // })
+    socket = new WebSocket(PUBLIC_API_ORIGIN + '/socket?user_id=' + user_id)
+
     socket.onopen = () => {
       console.log("connected.")
+    }
+    socket.onmessage = (event) => {
+      // let data = JSON.parse(event.data)
+      const instruction = event.data[0]
+      const jsonData = event.data.slice(2)
+      switch (instruction) {
+        case '1': {
+          const tanka: Tanka = JSON.parse(jsonData)
+          tanka_msg.set(tanka)
+          break
+        }
+        case '0': {
+          console.log()
+        }
+      }
     }
   })
 
   function send1() {
-    socket.send("1,"+token+`{"meigen": "${tanka}", "poet": "${poet}"}`)
+    console.log("token:" + token)
+    socket.send("1,"+token+`,{"meigen": "${tanka}", "poet": "${poet}"}`)
   }
-
 </script>
-
 
 {#if isLoggedIn}
   <div id='tl_container'>

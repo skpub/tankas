@@ -9,6 +9,7 @@
   let result: { token: string } | null = null // null: not sent yet, true: success, false: failed.
 
   async function login() {
+    const user_id_ = user_id
     const form = new FormData()
     form.append('user_id', user_id)
     form.append('password', password)
@@ -23,6 +24,7 @@
         goto('/')
         if (result != null) {
           setCookie('token', result.token, 30)
+          setCookie('user_id', user_id_, 30)
         }
         else notify('何かがおかしい。ログイン成功なのにトークンが返ってこない。')
       } else {
