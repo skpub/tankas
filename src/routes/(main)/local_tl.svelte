@@ -5,7 +5,8 @@
   import { notify } from "$lib/notificationStore";
   import { onDestroy, onMount } from "svelte";
   import type { Tanka } from "./tankaReceive";
-  import { tanka_msg } from "./tankaReceive";
+  import Quote from "./quote.svelte"
+  import { fetchUserImgCache } from "../userImageCache";
 
   let tl_fetcher: number
   onMount(() => {
@@ -16,18 +17,14 @@
     clearInterval(tl_fetcher)
   })
 
+  const token = getCookie('token')
+
   let contents: Tanka[] = []
 
-  $: {
-    if ($tanka_msg) {
-      console.log($tanka_msg)
-      contents = [...contents, $tanka_msg]
-    }
-  }
+  let wait: Promise<any>
 
   async function tl_fetch() {
     contents = []
-    const token = getCookie('token')
     if (token != null) {
       const res = await fetch(PUBLIC_API_ORIGIN + `/auth/fetch_tl?before=${Date.now()+1}`, {
         method: 'GET',
@@ -39,86 +36,43 @@
         // }),
       })
       res.json().then(data => {
+        const user_ids: Set<string> = new Set()
         const ret_contents: Tanka[] = data.contents
         if (ret_contents.length === 0) return
-        console.log(ret_contents)
         for (let content of ret_contents) {
+          user_ids.add(content.whom_id)
           contents.push(content)
-          contents = contents
+          contents = [...contents, content]
         }
+        wait = fetchUserImgCache(user_ids, token)
       })
     } else {
       notify('トークンが期限を迎えました。')
       goto('/login')
     }
   }
-  const timeoptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    timeZoneName: 'short'
+  async function fetch_user_image(user_id: string) {
+    const img = await fetch(PUBLIC_API_ORIGIN + `/auth/fetch_user_imgs?user_id=${user_id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${token}`
+      },
+    })
+    return await img.blob()
   }
 </script>
 
 <div id='TL'>
-  {#each contents as content}
-    <div class='tanka_container'>
-      <p class='whom'>{content.whom_id}</p>
-      <p class='tanka'>「 {content.meigen} 」</p>
-      <i><p class='poet'>{content.poet}</p></i>
-      <p class='time'>{(() => {
-        const date = new Date(content.created_at.Time)
-        const yyyymmdd = new Intl.DateTimeFormat(
-          'ja-JP',
-          {
-            year:   'numeric',
-            month:  '2-digit',
-            day:    '2-digit',
-            hour:   '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-          }
-        )
-        return yyyymmdd.format(date)
-      })()}</p>
-    </div>
-    <hr>
+  {#each contents as tanka}
+  <Quote  {tanka} {wait}/>
   {/each}
 </div>
 
 <style>
-  #TL_container {
-    display: flex;
-    flex-flow: column;
-    height: calc(100dvh - 100px);
-  }
   #TL {
     width: 100%;
     flex-grow: 1;
     margin: 0 auto;
     background-color: var(--background-contents);
-  }
-  .tanka_container {
-    font-family: sans-serif;
-    padding: 15px;
-    padding-left: 32px;
-  }
-  .time {
-    opacity: 0.5;
-    color: var(--color1)
-  }
-  .tanka {
-    font-size: 18px;
-    filter: drop-shadow(3px 3px 0px #000000);
-  }
-  .whom {
-    margin: 0;
-    color: var(--color2)
-  }
-  .poet {
-    margin: 0;
   }
 </style>

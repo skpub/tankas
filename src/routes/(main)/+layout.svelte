@@ -18,7 +18,7 @@
     socket = new WebSocket(PUBLIC_API_ORIGIN + '/socket?user_id=' + user_id)
 
     socket.onopen = () => {
-      console.log("connected.")
+      console.log("socket connected.")
     }
     socket.onmessage = (event) => {
       // let data = JSON.parse(event.data)
@@ -38,14 +38,14 @@
   })
 
   function send1() {
-    console.log("token:" + token)
     socket.send("1,"+token+`,{"meigen": "${tanka}", "poet": "${poet}"}`)
   }
 </script>
 
 {#if isLoggedIn}
   <div id='tl_container'>
-    <div id='tl_slot'></div>
+    <div id='tl_slot'>
+    </div>
     <hr>
     <div id='tl_view' class='scroll'>
       <slot />
