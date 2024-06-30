@@ -6,11 +6,12 @@
   import { getCookie } from '$lib/cookie'
   import { PUBLIC_API_ORIGIN } from "$env/static/public"
   import { notify } from '$lib/notificationStore'
+  import { writable } from 'svelte/store'
 
   let token = getCookie('token');
   let me = getCookie('user_id');
 
-  let user_id;
+  let user_id: string;
   $: user_id = $page.params.user_id;
 
   let img = default_icon
@@ -21,7 +22,7 @@
     following: boolean
   }
 
-  let prof: userProfile = {
+  var prof: userProfile = {
     name: '',
     bio: '',
     following: false
@@ -42,7 +43,7 @@
     prof = {
       name: prof_data["contents"].name,
       bio: prof_data["contents"].bio,
-      following: prof_data["contents"]
+      following: prof_data["contents"].is_following
     }
     inputName = prof.name
     inputBio = prof.bio
@@ -129,6 +130,35 @@
       })
     }
   }
+  function toggleFollow() {
+    const form = new FormData()
+    form.append('target_id', user_id)
+    if (prof.following) {
+      fetch(PUBLIC_API_ORIGIN + `/auth/unfollow`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `${token}`
+        },
+        body: form
+      }).then(res => {
+        res.json().then(_ => {
+          prof.following = !prof.following
+        })
+      })
+    } else {
+      fetch(PUBLIC_API_ORIGIN + `/auth/follow`, {
+        method: 'POST',
+        headers: {
+          Authorization: `${token}`
+        },
+        body: form
+      }).then(res => {
+        res.json().then(_ => {
+          prof.following = !prof.following
+        })
+      })
+    }
+  }
 </script>
 
 <div id='user_profile_container'>
@@ -177,7 +207,7 @@
           <td>{prof.bio}</td>
         </tr>
       </tbody></table>
-      <button>{prof.following ? 'フォロー解除': 'フォロー'}</button>
+      <button on:click={toggleFollow}>{prof.following ? 'フォロー解除': 'フォロー'}</button>
     </div>
   </div>
 {/if}
