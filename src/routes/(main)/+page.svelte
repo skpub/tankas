@@ -2,9 +2,9 @@
   import { loggedIn } from '$lib/cookie'
   import Local_TL from './local_tl.svelte';
   import { onMount } from 'svelte';
-  onMount(() => {
-    console.log($loggedIn)
-  })
+  // onMount(() => {
+  //   console.log($loggedIn)
+  // })
 </script>
 
 {#if $loggedIn}

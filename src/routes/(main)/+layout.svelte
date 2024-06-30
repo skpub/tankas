@@ -20,7 +20,6 @@
       console.log("socket connected.")
     }
     socket.onmessage = (event) => {
-      console.log("来た")
       // let data = JSON.parse(event.data)
       const instruction = event.data[0]
       const jsonData = event.data.slice(2)
@@ -38,9 +37,7 @@
   })
 
   function send1() {
-    console.log("send")
     socket.send("1,"+token+`,{"meigen": "${tanka}", "poet": "${poet}"}`)
-    console.log("sent")
   }
 </script>
 

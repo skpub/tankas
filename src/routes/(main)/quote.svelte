@@ -3,6 +3,7 @@
   import type { Tanka } from "./tankaReceive";
   import default_icon from "$lib/img/default_icon.png";
   import { userImageCache } from "../userImageCache";
+    import { goto } from "$app/navigation";
 
   export let tanka: Tanka
   export let wait: Promise<any>
@@ -16,14 +17,16 @@
 </script>
 
 <div class='tanka_container'>
+  <a class='link' href={`/user/${tanka.whom_id}`}>
   <div class='user'>
     {#await wait}
     <img src={default_icon} alt="">
     {:then}
     <img src={img} alt="">
     {/await}
-    <p class='whom'>{tanka.whom_id}</p>
+    <p class='whom'>{tanka.whom}<span> @{tanka.whom_id}</span></p>
   </div>
+  </a>
   <p class='tanka'>「 {tanka.meigen} 」</p>
   <i><p class='poet'>{tanka.poet}</p></i>
   <p class='time'>{(() => {
@@ -44,6 +47,13 @@
 </div>
 
 <style>
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  a:hover {
+    opacity: 0.8;
+  }
   .tanka_container {
     font-family: sans-serif;
     padding: 15px;
@@ -68,6 +78,10 @@
     filter: drop-shadow(3px 3px 0px #000000);
   }
   .whom {
+    margin: 0;
+    font-size: 18px;
+  }
+  span {
     margin: 0;
     color: var(--color2)
   }
