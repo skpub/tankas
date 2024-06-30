@@ -4,7 +4,7 @@
   import { getCookie } from "$lib/cookie";
   import { notify } from "$lib/notificationStore";
   import { onDestroy, onMount } from "svelte";
-  import type { Tanka } from "./tankaReceive";
+  import { tanka_msg, type Tanka } from "./tankaReceive";
   import Quote from "./quote.svelte"
   import { fetchUserImgCache } from "../userImageCache";
 
@@ -20,6 +20,12 @@
   const token = getCookie('token')
 
   let contents: Tanka[] = []
+
+  tanka_msg.subscribe((tanka) => {
+    if (tanka !== undefined) {
+      contents = [tanka, ...contents]
+    }
+  })
 
   let wait: Promise<any>
 
@@ -41,7 +47,6 @@
         if (ret_contents.length === 0) return
         for (let content of ret_contents) {
           user_ids.add(content.whom_id)
-          contents.push(content)
           contents = [...contents, content]
         }
         wait = fetchUserImgCache(user_ids, token)
