@@ -42,6 +42,7 @@
 
 <style>
   :global(body) {
+    font-family: 'Zen Maru Gothic', sans-serif;
     --background: #252320;
     --background-contents: #353330;
     --foreground: #f5f5f5;
@@ -81,6 +82,7 @@
     background-color: var(--color2);
     color: var(--background);
     height: 50px;
+    width: 100px;
     border-radius: 30px;
   }
   #main {
@@ -114,5 +116,7 @@
   #content {
     flex-grow: 1;
     /* margin-left: 15px; */
+    display: flex;
+    align-items: center;
   }
 </style>
