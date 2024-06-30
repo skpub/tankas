@@ -47,13 +47,6 @@
 </div>
 
 <style>
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  a:hover {
-    opacity: 0.8;
-  }
   .tanka_container {
     font-family: sans-serif;
     padding: 15px;

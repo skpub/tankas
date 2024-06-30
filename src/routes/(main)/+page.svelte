@@ -1,35 +1,20 @@
 <script lang="ts">
   import { loggedIn } from '$lib/cookie'
   import Local_TL from './local_tl.svelte';
+  import Global_TL from './global_tl.svelte';
   import { onMount } from 'svelte';
+  import { selectionSlot } from './selectionSlot';
   // onMount(() => {
   //   console.log($loggedIn)
   // })
 </script>
 
-{#if $loggedIn}
+{#if $selectionSlot === 0}
   <Local_TL />
-{:else}
-  <div id='login_or_signup'>
-  <h1>Tankas</h1>
-    <div>
-      <button>Log in</button>
-    </div>
-    <div>
-      <button>Sign up</button>
-    </div>
-  </div>
+{:else if $selectionSlot === 1}
+  <Global_TL />
 {/if}
 
 <style>
-  #login_or_signup {
-    align-items: center;
-    margin: 0 auto;
-    display: flex;
-    flex-flow: column;
-    button {
-      widtH: 100px;
-    }
-  }
 </style>
 

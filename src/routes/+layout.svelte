@@ -54,6 +54,13 @@
     margin: 0;
     padding: 0;
   }
+  :global(a) {
+    text-decoration: none;
+    color: inherit;
+  }
+  :global(a:hover) {
+    opacity: 0.8;
+  }
   :global(.scroll) {
     overflow: auto;
   }
