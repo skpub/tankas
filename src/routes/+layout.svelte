@@ -6,10 +6,15 @@
   import home from '$lib/img/home.svg'
   import Notification from '$lib/Notification.svelte'
   import { notify } from '$lib/notificationStore'
-  import { loggedIn, getCookie } from '$lib/cookie'
+  import { loggedIn, getCookie, refreshTokenPeriodically } from '$lib/cookie'
   import { onMount } from 'svelte'
   // export { notify }
   const user_id = getCookie('user_id')
+  onMount(() => {
+    if ($loggedIn) {
+      refreshTokenPeriodically()
+    }
+  })
 </script>
 
 <div id='main'>

@@ -7,7 +7,7 @@ export function setCookie(name: string, value: string, duration_min: number) {
   document.cookie = `${name}=${value};expires=${date.toUTCString()}`
 }
 
-export let loggedIn: Writable<boolean> = writable(false)
+export let loggedIn: Writable<boolean> = writable(getCookie('token') !== null)
 
 export function getCookie(name: string) {
   if (typeof document === 'undefined') {
@@ -39,8 +39,8 @@ async function refreshToken() {
 let refreshTimer: number
 
 export async function refreshTokenPeriodically() {
-  console.log("テスト")
   loggedIn.set(true)
   clearInterval(refreshTimer)
+  refreshToken()
   refreshTimer = setInterval(refreshToken, (4 * 60 * 1000) + 50 * 1000)
 }
