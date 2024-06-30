@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getCookie } from '$lib/cookie'
+  import { getCookie, loggedIn } from '$lib/cookie'
   import { goto } from '$app/navigation'
   import { PUBLIC_API_ORIGIN } from "$env/static/public"
   import { onMount } from 'svelte'
@@ -8,7 +8,6 @@
 
   const token = getCookie('token')
   const user_id = getCookie('user_id')
-  const isLoggedIn = token != null
 
   let tanka = ''
   let poet = ''
@@ -42,7 +41,7 @@
   }
 </script>
 
-{#if isLoggedIn}
+{#if $loggedIn}
   <div id='tl_container'>
     <div id='tl_slot'>
     </div>

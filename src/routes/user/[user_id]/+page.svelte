@@ -28,7 +28,9 @@
 
   onMount(async () => {
     const img_ret = await fetchAndGetUserImg(user_id, token?? '');
-    img = img_ret 
+    if (img_ret !== undefined) {
+      img = img_ret 
+    }
     const user_profile = await fetch(PUBLIC_API_ORIGIN + `/auth/fetch_user_prof?user_id=${user_id}`, {
       method: 'GET',
       headers: {

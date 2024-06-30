@@ -1,6 +1,6 @@
 <script lang="ts">
     import { notify } from "$lib/notificationStore";
-    import { setCookie } from "$lib/cookie";
+    import { setCookie, refreshTokenPeriodically } from "$lib/cookie";
     import { goto } from "$app/navigation";
     import { PUBLIC_API_ORIGIN } from "$env/static/public"
 
@@ -25,6 +25,7 @@
         if (result != null) {
           setCookie('token', result.token, 30)
           setCookie('user_id', user_id_, 30)
+          refreshTokenPeriodically()
         }
         else notify('何かがおかしい。ログイン成功なのにトークンが返ってこない。')
       } else {

@@ -1,12 +1,15 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import icon from '$lib/img/icon.svg'
   import search from '$lib/img/search.svg'
+  import profile from '$lib/img/profile.svg'
   import home from '$lib/img/home.svg'
   import Notification from '$lib/Notification.svelte'
   import { notify } from '$lib/notificationStore'
-
-  export { notify }
+  import { loggedIn, getCookie } from '$lib/cookie'
+  import { onMount } from 'svelte'
+  // export { notify }
+  const user_id = getCookie('user_id')
 </script>
 
 <div id='main'>
@@ -19,6 +22,11 @@
       <a href="/search">
         <img src={search} alt="">
       </a>
+      {#if $loggedIn}
+        <a href={`/user/${user_id}`}>
+          <img src={profile} alt="">
+        </a>
+      {/if}
     </div>
   </div>
   <div id='content'>

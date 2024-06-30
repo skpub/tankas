@@ -1,30 +1,35 @@
-<script>
-  import { getCookie } from '$lib/cookie'
+<script lang="ts">
+  import { loggedIn } from '$lib/cookie'
   import Local_TL from './local_tl.svelte';
-
-  const token = getCookie('token')
-  const isLoggedIn = token != null
+  import { onMount } from 'svelte';
+  onMount(() => {
+    console.log($loggedIn)
+  })
 </script>
 
-{#if isLoggedIn}
+{#if $loggedIn}
   <Local_TL />
 {:else}
-  <h1>Tankas</h1>
   <div id='login_or_signup'>
+  <h1>Tankas</h1>
     <div>
-      <h1>Log in</h1>
-      <button></button>
+      <button>Log in</button>
     </div>
     <div>
-      <h1>Sign up</h1>
-      <button></button>
+      <button>Sign up</button>
     </div>
   </div>
 {/if}
 
 <style>
   #login_or_signup {
+    align-items: center;
+    margin: 0 auto;
     display: flex;
+    flex-flow: column;
+    button {
+      widtH: 100px;
+    }
   }
 </style>
 
