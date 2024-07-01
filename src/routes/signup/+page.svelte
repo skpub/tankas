@@ -1,5 +1,7 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
   import { PUBLIC_API_ORIGIN } from "$env/static/public"
+    import { notify } from "$lib/notificationStore";
   let result: { message: string } | null = null
   let status: boolean | null = null // null: not sent yet, true: success, false: failed.
 
@@ -20,6 +22,8 @@
     })
     const result = await response.json()
     status = response.ok
+    notify('ユーザの追加に成功しました')
+    goto('/login')
     console.log(response)
   }
 </script>
@@ -31,7 +35,6 @@
     <input name="user_id"  bind:value={user_id}   placeholder="UserID(ログインに使うID)" type="text">
     <input name="email"    bind:value={email}     placeholder="Email" type="email">
     <input name="password" bind:value={password}  placeholder="Password" type="password">
-    <!-- <button on:click={signup}>Sign up</button> -->
     <button>Sign up</button>
   </form>
   {#if status == null}

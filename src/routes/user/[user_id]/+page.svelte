@@ -6,7 +6,6 @@
   import { getCookie } from '$lib/cookie'
   import { PUBLIC_API_ORIGIN } from "$env/static/public"
   import { notify } from '$lib/notificationStore'
-  import { writable } from 'svelte/store'
 
   let token = getCookie('token');
   let me = getCookie('user_id');

@@ -22,7 +22,6 @@
     }
     socket.onmessage = (event) => {
       // let data = JSON.parse(event.data)
-      console.log(event.data)
       const instruction = event.data[0]
       const jsonData = event.data.slice(2)
       switch (instruction) {
@@ -86,7 +85,7 @@
 
 <style>
   .slot.selected {
-    color: var(--color1);
+    color: var(--color1) !important;
   }
   #tl_container {
     margin: 0 auto;
@@ -129,6 +128,7 @@
     height: 50px;
     h2 {
       margin-right: 24px;
+      color: grey;
     }
     h2:hover {
       opacity: 0.8;

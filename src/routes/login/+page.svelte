@@ -54,5 +54,10 @@
     h1 {
       text-align: center;
     }
+    button {
+      margin-left: auto;
+      margin-right: auto;
+      float: right;
+    }
   }
 </style>

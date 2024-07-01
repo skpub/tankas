@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store'
 
 export type Tanka = {
+  meigen_id: string,
   meigen: string,
   whom_id: string,
   whom: string,
