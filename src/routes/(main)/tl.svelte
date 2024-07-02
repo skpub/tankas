@@ -17,11 +17,11 @@
     tl.addEventListener('scroll', () => {
       if (!isRunning) {
         window.requestAnimationFrame(async () => {
-          if (tl.scrollTop + tl.clientHeight >= tl.scrollHeight && contents.length > 0) {
-            const time = new Date(contents[contents.length-1].created_at.Time).getTime() / 1000
+          if (tl.scrollHeight <= tl.scrollTop + tl.clientHeight) {
+            var time = contents.length > 0 ?
+              new Date(contents[contents.length-1].created_at.Time).getTime() / 1000 :
+              Date.now()
             const _ = await tl_fetch($selectionSlot, Math.ceil(time), false)
-          } else {
-            const _ = await tl_fetch($selectionSlot, Math.ceil(Date.now()/1000), false)
           }
           isRunning = false
         })
